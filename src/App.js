@@ -231,7 +231,7 @@ class SearchBox extends React.Component {
     };
 
     var iconStyle = {
-      background: "url(src/svg/ic_search_black_18px.svg) center center no-repeat",
+      background: "url(/svg/ic_search_black_18px.svg) center center no-repeat",
       height: "30px",
       width: "29px",
       position: "absolute",
@@ -371,7 +371,7 @@ class SideBarFooter extends React.Component {
     };
 
     var iconStyle = {
-      background: "url(src/svg/ic_settings_black_24px.svg) center center no-repeat",
+      background: "url(/svg/ic_settings_black_24px.svg) center center no-repeat",
       width: "24px",
       height: "24px",
       margin: "0 18px 0 20px"
@@ -439,8 +439,8 @@ class Header extends React.Component {
     return (
       <header style={headerStyle}>
         <Title>{TestUser.selectedContact.name}</Title>
-        <Button path="src/svg/ic_mic_white_24px.svg" />
-        <Button path="src/svg/ic_videocam_white_24px.svg" />
+        <Button path="/svg/ic_mic_white_24px.svg" />
+        <Button path="/svg/ic_videocam_white_24px.svg" />
         <StatusBar />
       </header>
     );
@@ -593,7 +593,7 @@ class Message extends React.Component {
       border: "1px solid #000000",
       height: "70px",      
       borderRadius: "35px",
-      background: "url(src/svg/ic_insert_photo_black_48px.svg) center center no-repeat"
+      background: "url(/svg/ic_insert_photo_black_48px.svg) center center no-repeat"
       // display: "flex",
       // backgroundImage: "url(src/svg/ic_insert_photo_black_24px.svg)",
       // backgroundRepeat: "none"
@@ -702,14 +702,14 @@ class ChatContainerFooter extends React.Component {
       top: "0",
       opacity: "0.3",
       cursor: "pointer",
-      background: "url(src/svg/ic_attach_file_black_24px.svg) center center no-repeat"
+      background: "url(/svg/ic_attach_file_black_24px.svg) center center no-repeat"
       // backgroundImage: "url(src/svg/ic_insert_photo_black_24px.svg)",
       // backgroundRepeat: "none"
       // transform: "scale(1.1, 1.1)",
     };
 
     var submitStyle = {
-      background: "#1EB6D2 url(src/svg/ic_send_white_24px.svg) center center no-repeat",
+      background: "#1EB6D2 url(/svg/ic_send_white_24px.svg) center center no-repeat",
       height: "39px",
       width: "90px",
       position: "absolute",
