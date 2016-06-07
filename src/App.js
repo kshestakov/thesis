@@ -646,13 +646,13 @@ class ChatContainerFooter extends React.Component {
     var requestedPeer = $('#msg').val().substr(0, index);
     var msg = $('#msg').val().substr(index + 1);
     var conns = peer.connections[requestedPeer];
-    conns.send(msg);
-    console.log("You: " + msg);
-      // for (var i = 0, ii = conns.length; i < ii; i += 1) {
-      //   var conn = conns[i];
-      //   conn.send(msg);
-      //   console.log("You: " + msg);
-      // };
+    // conns.send(msg);
+    // console.log("You: " + msg);
+    for (let i = 0; i < conns.length; i++) {
+      var conn = conns[i];
+      conn.send(msg);
+      console.log("You: " + msg);
+    };
     $('#msg').val(requestedPeer + ' ');
     $('#msg').focus();
   };

@@ -1,7 +1,7 @@
 {
-  "name": "webpack-es6-demo",
+  "name": "thesis",
   "version": "1.0.0",
-  "description": "A small demo project that shows how to use webpack for client-side development in ECMAScript 6.",
+  "description": "P2P chat",
   "scripts": {
     "watch": "webpack --watch",
     "start": "webpack-dev-server --hot --inline --progress --content-base build/"
