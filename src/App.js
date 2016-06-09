@@ -244,14 +244,20 @@ class SearchBox extends React.Component {
     };
 
     let iconStyle = {
-      background: "url(/svg/ic_search_black_18px.svg) center center no-repeat",
+      // background: "url(/svg/ic_search_black_18px.svg) center center no-repeat",
       height: "30px",
       width: "29px",
       position: "absolute",
       top: "10px",
       left: "15px",
       cursor: "pointer",
-      opacity: "0.3"
+      opacity: "0.3",
+      textAlign: "center",
+      lineHeight: "29px",
+      ':hover': {
+        opacity: "0.5",
+        transform: "scale(1.1,1.1)"
+      }
     }
 
     let styleInput = {
@@ -268,7 +274,7 @@ class SearchBox extends React.Component {
 
     return (
       <div style={style}>
-        <div style={iconStyle}></div>
+        <span style={iconStyle} className="fa fa-search"></span>
         <input style={styleInput} type="search" placeholder="Filter"></input>
       </div>
     );
@@ -340,7 +346,12 @@ class Contact extends React.Component {
       height: "50px",
       display: "flex",
       alignItems: "center",
-      cursor: "pointer"
+      cursor: "pointer",
+      ':hover': {
+        backgroundColor: "#F3F3F3"
+        // opacity: "0.5",
+        // transform: "rotate(90deg) scale(1.1,1.1)"
+      }
     };
 
     let photoStyle = {
@@ -378,7 +389,10 @@ class SideBarFooter extends React.Component {
       display: "flex",
       alignItems: "center",
       cursor: "pointer",
-      backgroundColor: "#FFFFFF"
+      backgroundColor: "#FFFFFF",
+      ':hover': {
+        backgroundColor: "#F3F3F3"
+      }
       // width: "100%",
       // alignSelf: "flex-end",
       // paddingLeft: "18px",
@@ -391,9 +405,11 @@ class SideBarFooter extends React.Component {
     };
 
     let iconStyle = {
-      background: "url(/svg/ic_settings_black_24px.svg) center center no-repeat",
+      // background: "url(/svg/ic_settings_black_24px.svg) center center no-repeat",
       width: "24px",
       height: "24px",
+      lineHeight: "24px",
+      textAlign: "center",
       margin: "0 18px 0 20px"
     };
 
@@ -402,7 +418,7 @@ class SideBarFooter extends React.Component {
 
     return (
       <footer style={style}>
-        <div style={iconStyle}></div>
+        <span style={iconStyle} className="fa fa-cog fa-lg"></span>
         <div style={textStyle}>Settings</div>
       </footer>
     );
@@ -484,12 +500,12 @@ class ButtonCall extends React.Component {
       cursor: "pointer",
       display: "flex",
       alignItems: "center",
-      // background: "url(/svg/ic_mic_white_24px.svg) center center no-repeat",
       backgroundColor: "#1BA3BD",
       ':hover': {
         backgroundColor: "#178DA3"
-      },
+      }
 
+      // background: "url(/svg/ic_mic_white_24px.svg) center center no-repeat",
       // display: "flex",
       // backgroundImage: "url(src/svg/ic_insert_photo_black_24px.svg)",
       // backgroundRepeat: "none"
@@ -519,15 +535,27 @@ class ButtonVideocall extends React.Component {
       width: "40px",
       borderRadius: "20px",
       cursor: "pointer",
-      background: "#1BA3BD url(/svg/ic_videocam_white_24px.svg) center center no-repeat"
+      display: "flex",
+      alignItems: "center",
+      backgroundColor: "#1BA3BD",
+      ':hover': {
+        backgroundColor: "#178DA3"
+      }
+      // background: "#1BA3BD url(/svg/ic_videocam_white_24px.svg) center center no-repeat"
       // display: "flex",
       // backgroundImage: "url(src/svg/ic_insert_photo_black_24px.svg)",
       // backgroundRepeat: "none"
       // transform: "scale(1.1, 1.1)",
     };
 
+    let iconStyle = {
+      margin: "auto"
+    };
+
     return (
-      <div style={style}></div>
+      <div style={style}>
+        <span style={iconStyle} className="fa fa-video-camera fa-inverse fa-lg"></span>
+      </div>
     );
   }
 };
@@ -664,8 +692,9 @@ class Message extends React.Component {
       border: "1px solid #000000",
       height: "70px",      
       borderRadius: "35px",
-      background: "url(/svg/ic_insert_photo_black_48px.svg) center center no-repeat"
-      // display: "flex",
+      display: "flex",
+      alignItems: "center"
+      // background: "url(/svg/ic_insert_photo_black_48px.svg) center center no-repeat"
       // backgroundImage: "url(src/svg/ic_insert_photo_black_24px.svg)",
       // backgroundRepeat: "none"
       // transform: "scale(1.1, 1.1)",
@@ -695,13 +724,19 @@ class Message extends React.Component {
       // display: "flex"
     };
 
+    let iconStyle = {
+      margin: "auto"
+    };
+
     let date = new Date();
     date = date.getHours() + ":" + ((date.getMinutes() < 10) ? ("0" + date.getMinutes()) : date.getMinutes());
 
     return (
       <div>
         <div style={style}>
-          <div style={photoStyle}></div>
+        <div style={photoStyle}>
+          <span style={iconStyle} className="fa fa-user fa-3x"></span>
+        </div>
           <div style={textStyle}>{this.props.children}</div>
           <div style={timeStyle}>{date}</div>
         </div>
@@ -769,27 +804,42 @@ class ChatContainerFooter extends React.Component {
 
     let iconStyle = {
       position: "absolute",
-      width: "40px",
-      height: "39px",      
+      width: "39px",
+      height: "40px",      
       right: "0",
       top: "0",
       opacity: "0.3",
       cursor: "pointer",
-      background: "url(/svg/ic_attach_file_black_24px.svg) center center no-repeat"
+      textAlign: "center",
+      lineHeight: "39px",
+      transform: "rotate(90deg)",
+      ':hover': {
+        // backgroundColor: "#CCCCCC",
+        opacity: "0.5",
+        transform: "rotate(90deg) scale(1.1,1.1)"
+      }
+      // background: "url(/svg/ic_attach_file_black_24px.svg) center center no-repeat"
       // backgroundImage: "url(src/svg/ic_insert_photo_black_24px.svg)",
       // backgroundRepeat: "none"
       // transform: "scale(1.1, 1.1)",
     };
 
     let submitStyle = {
-      background: "#1EB6D2 url(/svg/ic_send_white_24px.svg) center center no-repeat",
+      // background: "#1EB6D2 url(/svg/ic_send_white_24px.svg) center center no-repeat",
       height: "39px",
       width: "90px",
       position: "absolute",
       right: "10",
       outline: "none",
       cursor: "pointer",
-      border: "0"
+      backgroundColor: "#1EB6D2",
+      fontFamily: "FontAwesome",
+      color: "#FFFFFF",
+      fontSize: "20px",
+      border: "0",
+      ':hover': {
+        backgroundColor: "#1A9FB8"
+      }
       // marginRight: "10px",
     };
 
@@ -803,14 +853,16 @@ class ChatContainerFooter extends React.Component {
           <div style={wrapperStyle}>
             <div style={wrapperTextareaStyle}>
               <textarea style={textareaStyle} placeholder="Message" id="msg"></textarea>
-              <div style={iconStyle}></div>
+              <div style={iconStyle} className="fa fa-link fa-lg" key="0"></div>
             </div>
-            <input style={submitStyle} type="submit" value=""></input>
+            <input style={submitStyle} type="submit" value="&#xf1d8;" key="1"></input>
           </div>
         </form>
       </footer>
     );
   }
 };
+
+ChatContainerFooter = Radium(ChatContainerFooter);
 
 export default App
