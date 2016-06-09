@@ -1,6 +1,7 @@
 import React from 'react';
+import Radium from 'radium';
 
-const TestUser = {
+let TestUser = {
   name: "Kirill",
   contacts: [
     {
@@ -46,16 +47,16 @@ const TestUser = {
   }
 };
 
-var peer = new Peer({
+let peer = new Peer({
   key: 'r7jd35v5u9fcg14i',
   debug: 3,
   logFunction() {
-    var copy = Array.prototype.slice.call(arguments).join(' ');
+    let copy = Array.prototype.slice.call(arguments).join(' ');
     console.log(copy);
   }
 });
 
-var connectedPeers = {};
+let connectedPeers = {};
 
 peer.on('open', function(id){
   console.log('My peer ID is: ' + id);
@@ -81,7 +82,7 @@ function connect(c) {
 class App extends React.Component {
   render() {
 
-    var style = {
+    let style = {
       height: "100%",
       minWidth: "320px"
     };
@@ -95,10 +96,12 @@ class App extends React.Component {
   }
 };
 
+App = Radium(App);
+
 class SideBar extends React.Component {
 	render() {
 
-    var style = {
+    let style = {
       backgroundColor: "FFFFFF",
       width: "26%",
       maxWidth: "280px",
@@ -126,10 +129,12 @@ class SideBar extends React.Component {
 	}
 };
 
+SideBar = Radium(SideBar);
+
 class SideBarHeader extends React.Component {
   render() {
 
-    var headerStyle = {
+    let headerStyle = {
       height: "80px",
       backgroundColor: "#1EB6D2",
       display: "flex",
@@ -149,17 +154,19 @@ class SideBarHeader extends React.Component {
   }
 };
 
+SideBarHeader = Radium(SideBarHeader);
+
 class MenuIcon extends React.Component {
   render() {
 
-    var burgerDivStyle = {
+    let burgerDivStyle = {
       width: "24px",
       height: "20px",
       marginLeft: "24px",
       cursor: "pointer"
       // display: "inline-block",
     };
-    var lineDivStyle = {
+    let lineDivStyle = {
       height: "2px",
       marginBottom: "4px",
       backgroundColor: "#FFFFFF"
@@ -176,13 +183,15 @@ class MenuIcon extends React.Component {
   }
 };
 
+MenuIcon = Radium(MenuIcon);
+
 class Title extends React.Component {
   render() {
 
-    var style = {
+    let style = {
       margin: "0 15px",
       fontWeight: "300",
-      fontSize: "20pt",
+      fontSize: "27px",
       color: "#FFFFFF"
       // position: "absolute",
       // display: "inline-block",
@@ -197,10 +206,12 @@ class Title extends React.Component {
   }
 };
 
+Title = Radium(Title);
+
 class ContactsSection extends React.Component {
   render() {
 
-    var styleSection = {
+    let styleSection = {
       position: "relative",
       height: "calc(100% - 141px)"
       // width: "100%",
@@ -220,17 +231,19 @@ class ContactsSection extends React.Component {
   }
 };
 
+ContactsSection = Radium(ContactsSection);
+
 class SearchBox extends React.Component {
   render() {
 
-    var style = {
+    let style = {
       padding: "10px",
       backgroundColor: "#F3F8F9",
       position: "relative",
       borderBottom: "1px solid #D7DBDD"
     };
 
-    var iconStyle = {
+    let iconStyle = {
       background: "url(/svg/ic_search_black_18px.svg) center center no-repeat",
       height: "30px",
       width: "29px",
@@ -241,10 +254,10 @@ class SearchBox extends React.Component {
       opacity: "0.3"
     }
 
-    var styleInput = {
+    let styleInput = {
       width: "100%",
       backgroundColor: "#FFFFFF",
-      fontSize: "11pt",
+      fontSize: "15px",
       height: "30px",
       border: "1px solid #D7DBDD",
       outline: "none",
@@ -262,10 +275,12 @@ class SearchBox extends React.Component {
   }
 };
 
+SearchBox = Radium(SearchBox);
+
 class ContactList extends React.Component {
   render() {
 
-    var style = {
+    let style = {
       position: "absolute",
       top: "51px",
       bottom: "0",
@@ -277,7 +292,7 @@ class ContactList extends React.Component {
       // height: "100%"
       // maxHeight: "calc(100%-400px)"
     }
-    var contactNodes = TestUser.contacts.map(function(contact) {
+    let contactNodes = TestUser.contacts.map(function(contact) {
       return (
         <Contact>
           {contact.name}
@@ -292,12 +307,14 @@ class ContactList extends React.Component {
   }
 };
 
+ContactList = Radium(ContactList);
+
 class Contact extends React.Component {
   onClick() {
-    var index = $('#msg').val().indexOf(' ');
-    var requestedPeer = $('#msg').val().substr(0, index);
+    let index = $('#msg').val().indexOf(' ');
+    let requestedPeer = $('#msg').val().substr(0, index);
     if (!connectedPeers[requestedPeer]) {
-      var c = peer.connect(requestedPeer, {
+      let c = peer.connect(requestedPeer, {
         label: 'chat',
         serialization: 'none',
         metadata: {message: 'hi i want to chat with you!'}
@@ -312,12 +329,12 @@ class Contact extends React.Component {
 
   render() {
 
-    var avatarBackground = "#"+Math.floor(Math.random()*16777215).toString(16);
+    let avatarBackground = "#"+Math.floor(Math.random()*16777215).toString(16);
     // '#'+(Math.random()*0xFFFFFF<<0).toString(16);
 
-    var avatar = this.props.children.substr(0, 2).toUpperCase();
+    let avatar = this.props.children.substr(0, 2).toUpperCase();
 
-    var style = {
+    let style = {
       padding: "5px",
       width: "100%",
       height: "50px",
@@ -326,7 +343,7 @@ class Contact extends React.Component {
       cursor: "pointer"
     };
 
-    var photoStyle = {
+    let photoStyle = {
       width: "40px",
       height: "40px",
       borderRadius: "5px",      
@@ -334,7 +351,7 @@ class Contact extends React.Component {
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      fontSize: "17pt",
+      fontSize: "23px",
       backgroundColor: avatarBackground
       // border: "1px solid #000000",
       // background: "url(src/svg/ic_insert_photo_black_48px.svg) center center no-repeat"
@@ -349,10 +366,13 @@ class Contact extends React.Component {
   }
 };
 
+Contact = Radium(Contact);
+
+// @Radium
 class SideBarFooter extends React.Component {
   render() {
 
-    var style = {
+    let style = {
       borderTop: "1px solid #D7DBDD",
       height: "60px",
       display: "flex",
@@ -370,14 +390,14 @@ class SideBarFooter extends React.Component {
       // minWidth: "190px",
     };
 
-    var iconStyle = {
+    let iconStyle = {
       background: "url(/svg/ic_settings_black_24px.svg) center center no-repeat",
       width: "24px",
       height: "24px",
       margin: "0 18px 0 20px"
     };
 
-    var textStyle = {
+    let textStyle = {
     };
 
     return (
@@ -389,10 +409,12 @@ class SideBarFooter extends React.Component {
   }
 };
 
+SideBarFooter = Radium(SideBarFooter);
+
 class ChatContainer extends React.Component {
   render() {
 
-    var style = {
+    let style = {
       backgroundColor: "#FFFFFF",
       overflow: "hidden",
       height: "100%"
@@ -423,10 +445,12 @@ class ChatContainer extends React.Component {
   } 
 };
 
+ChatContainer = Radium(ChatContainer);
+
 class Header extends React.Component {
   render() {
 
-    var headerStyle = {
+    let headerStyle = {
       height: "80px",
       backgroundColor: "#1EB6D2",
       paddingLeft: "15px",
@@ -439,24 +463,63 @@ class Header extends React.Component {
     return (
       <header style={headerStyle}>
         <Title>{TestUser.selectedContact.name}</Title>
-        <Button path="/svg/ic_mic_white_24px.svg" />
-        <Button path="/svg/ic_videocam_white_24px.svg" />
+        <ButtonCall path="/svg/ic_mic_white_24px.svg" />
+        <ButtonVideocall path="/svg/ic_videocam_white_24px.svg" />
         <StatusBar />
       </header>
     );
   }
 };
 
-class Button extends React.Component {
+Header = Radium(Header);
+
+class ButtonCall extends React.Component {
   render() {
 
-    var style = {
+    let style = {
       marginLeft: "10px",
       height: "40px",
       width: "40px",
       borderRadius: "20px",
       cursor: "pointer",
-      background: "#1BA3BD url(" + this.props.path + ") center center no-repeat"
+      display: "flex",
+      alignItems: "center",
+      // background: "url(/svg/ic_mic_white_24px.svg) center center no-repeat",
+      backgroundColor: "#1BA3BD",
+      ':hover': {
+        backgroundColor: "#178DA3"
+      },
+
+      // display: "flex",
+      // backgroundImage: "url(src/svg/ic_insert_photo_black_24px.svg)",
+      // backgroundRepeat: "none"
+      // transform: "scale(1.1, 1.1)",
+    };
+
+    let iconStyle = {
+      margin:"auto"
+    };
+
+    return (
+      <div style={style}>
+        <span style={iconStyle} className="fa fa-microphone fa-inverse fa-lg"></span>
+      </div>
+    );
+  }
+};
+
+ButtonCall = Radium(ButtonCall);
+
+class ButtonVideocall extends React.Component {
+  render() {
+
+    let style = {
+      marginLeft: "10px",
+      height: "40px",
+      width: "40px",
+      borderRadius: "20px",
+      cursor: "pointer",
+      background: "#1BA3BD url(/svg/ic_videocam_white_24px.svg) center center no-repeat"
       // display: "flex",
       // backgroundImage: "url(src/svg/ic_insert_photo_black_24px.svg)",
       // backgroundRepeat: "none"
@@ -469,10 +532,12 @@ class Button extends React.Component {
   }
 };
 
+ButtonVideocall = Radium(ButtonVideocall);
+
 class StatusBar extends React.Component {
   render() {
 
-    var style = {
+    let style = {
       display: "flex",
       alignItems: "center",
       borderRadius: "15px",
@@ -494,9 +559,9 @@ class StatusBar extends React.Component {
       // transform: "scale(1.1, 1.1)",
     };
 
-    var markerColor = TestUser.selectedContact.status === "ONLINE" ? "#B2EA5A" : "#EB5E67";
+    let markerColor = TestUser.selectedContact.status === "ONLINE" ? "#B2EA5A" : "#EB5E67";
 
-    var markerStyle = {
+    let markerStyle = {
       marginRight: "4px",
       borderRadius: "7px",
       width: "10px",
@@ -514,10 +579,12 @@ class StatusBar extends React.Component {
   }
 };
 
+StatusBar = Radium(StatusBar);
+
 class ChatSection extends React.Component {
   render() {
 
-    var styleSection = {
+    let styleSection = {
       position: "relative",
       height: "calc(100% - 141px)"
     };
@@ -530,10 +597,12 @@ class ChatSection extends React.Component {
   }
 };
 
+ChatSection = Radium(ChatSection);
+
 class MessageList extends React.Component {
   render() {
 
-    var style = {
+    let style = {
       position: "absolute",
       top: "0",
       bottom: "0",
@@ -550,9 +619,9 @@ class MessageList extends React.Component {
       // maxHeight: "calc(100%-400px)"
     };
     
-    var messages = TestUser.contacts.map(function(contact) {
+    let messages = TestUser.contacts.map(function(contact) {
       if (contact.name === TestUser.selectedContact.name) { 
-        var boldStyle = {
+        let boldStyle = {
           margin: "12px 0 7px 0"
         };
         return (
@@ -573,10 +642,12 @@ class MessageList extends React.Component {
   }
 };
 
+MessageList = Radium(MessageList);
+
 class Message extends React.Component {
   render() {
 
-    var style = {
+    let style = {
       padding: "5px 15px 25px 16px",
       display: "flex",
       position: "relative",
@@ -587,7 +658,7 @@ class Message extends React.Component {
       // alignItems: "flex-start",
     };
 
-    var photoStyle = {
+    let photoStyle = {
       marginTop: "14px",
       minWidth: "70px",
       border: "1px solid #000000",
@@ -600,7 +671,7 @@ class Message extends React.Component {
       // transform: "scale(1.1, 1.1)",
     };
 
-    var textStyle = {
+    let textStyle = {
       margin: "3px 105px 0 27px",
       lineHeight: "20px",
       fontSize: "14px"
@@ -609,7 +680,7 @@ class Message extends React.Component {
       // marginBottom: "10px"
       // display: "flex"
     };
-    var timeStyle = {
+    let timeStyle = {
       marginTop: "16px",
       marginRight: "7px",
       fontWeight: "300",
@@ -624,7 +695,7 @@ class Message extends React.Component {
       // display: "flex"
     };
 
-    var date = new Date();
+    let date = new Date();
     date = date.getHours() + ":" + ((date.getMinutes() < 10) ? ("0" + date.getMinutes()) : date.getMinutes());
 
     return (
@@ -639,17 +710,19 @@ class Message extends React.Component {
   }
 };
 
+Message = Radium(Message);
+
 class ChatContainerFooter extends React.Component {
   onSubmit(e) {
     e.preventDefault();
-    var index = $('#msg').val().indexOf(' ');
-    var requestedPeer = $('#msg').val().substr(0, index);
-    var msg = $('#msg').val().substr(index + 1);
-    var conns = peer.connections[requestedPeer];
+    let index = $('#msg').val().indexOf(' ');
+    let requestedPeer = $('#msg').val().substr(0, index);
+    let msg = $('#msg').val().substr(index + 1);
+    let conns = peer.connections[requestedPeer];
     // conns.send(msg);
     // console.log("You: " + msg);
     for (let i = 0; i < conns.length; i++) {
-      var conn = conns[i];
+      let conn = conns[i];
       conn.send(msg);
       console.log("You: " + msg);
     };
@@ -658,7 +731,7 @@ class ChatContainerFooter extends React.Component {
   };
 
   render() {
-    var style = {
+    let style = {
       borderTop: "1px solid #D7DBDD",
       height: "60px",
       display: "flex",
@@ -668,12 +741,12 @@ class ChatContainerFooter extends React.Component {
       // padding: "10px"
     };
 
-    var wrapperStyle = {
+    let wrapperStyle = {
       display: "flex",
       width: "100%"
     };
 
-    var textareaStyle = {
+    let textareaStyle = {
       height: "20px",
       width: "calc(100% - 54px)",
       display: "block",
@@ -687,14 +760,14 @@ class ChatContainerFooter extends React.Component {
       fontSize: "14px"
     };
 
-    var wrapperTextareaStyle = {
+    let wrapperTextareaStyle = {
       position: "relative",
       width: "100%",
       margin: "0 110px 0 10px" 
       // height: "40px",
     };
 
-    var iconStyle = {
+    let iconStyle = {
       position: "absolute",
       width: "40px",
       height: "39px",      
@@ -708,7 +781,7 @@ class ChatContainerFooter extends React.Component {
       // transform: "scale(1.1, 1.1)",
     };
 
-    var submitStyle = {
+    let submitStyle = {
       background: "#1EB6D2 url(/svg/ic_send_white_24px.svg) center center no-repeat",
       height: "39px",
       width: "90px",
@@ -720,7 +793,7 @@ class ChatContainerFooter extends React.Component {
       // marginRight: "10px",
     };
 
-    var formStyle = {
+    let formStyle = {
       width: "100%"
     };
 
