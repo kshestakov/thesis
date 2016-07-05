@@ -90,9 +90,14 @@ peer.on('call', function(call){
   });
 });
 
+let key = 0;
+let weight = 0;
+let funcReceived;
+
 function connect(c) {
   c.on('data', function(data) {
     console.log("Received: " + data);
+    funcReceived(data);
   });
   c.on('close', function() {
     alert(c.peer + ' has left the chat.');
@@ -457,12 +462,16 @@ SideBarFooter = Radium(SideBarFooter);
 class ChatContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {data:[]};
-    this.receiveCallback = this.receiveCallback.bind(this);
+    this.state = {sentData:[]};
+    this.displaySentMessages = this.displaySentMessages.bind(this);
   };
 
-  receiveCallback(text) {
-    this.setState({data: this.state.data.concat(<Message text={text} author={"You"} key={this.state.data.length + 1} />)});
+  displaySentMessages(text) {
+    let date = new Date();
+    date = date.getHours() + ":" + ((date.getMinutes() < 10) ? ("0" + date.getMinutes()) : date.getMinutes());
+    this.setState({sentData: this.state.sentData.concat(
+      <Message text={text} author={"You"} key={key++} weight={weight++} date={date} />
+    )});
   };
 
   render() {
@@ -491,8 +500,8 @@ class ChatContainer extends React.Component {
     return (       
       <div style={style}>
         <Header />
-        <ChatSection data={this.state.data}/>
-        <ChatContainerFooter receiveCallback={this.receiveCallback}/>
+        <ChatSection sentData={this.state.sentData}/>
+        <ChatContainerFooter displaySentMessages={this.displaySentMessages}/>
       </div>
     );   
   } 
@@ -694,7 +703,7 @@ class ChatSection extends React.Component {
       <section style={styleSection}>
         <video style={theirvideoStyle} id="their-video" autoPlay></video>
         <video style={myvideoStyle} id="my-video" muted="true" autoPlay></video>
-        <MessageList data={this.props.data}/>
+        <MessageList sentData={this.props.sentData}/>
       </section>
     );
   }
@@ -703,6 +712,21 @@ class ChatSection extends React.Component {
 ChatSection = Radium(ChatSection);
 
 class MessageList extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {receivedData: []};
+    funcReceived = this.displayReceivedMessages.bind(this);
+  };
+
+  displayReceivedMessages(text) {
+    let date = new Date();
+    date = date.getHours() + ":" + ((date.getMinutes() < 10) ? ("0" + date.getMinutes()) : date.getMinutes());
+    this.setState({receivedData: this.state.receivedData.concat(
+      <Message text={text} author={TestUser.selectedContact.name} key={key++} weight={weight++} date={date} />
+    )});
+  };
+
   render() {
 
     let style = {
@@ -722,7 +746,6 @@ class MessageList extends React.Component {
       // maxHeight: "calc(100%-400px)"
     };
     
-
     // let messages = this.state.data.map(function(contact) {
     //   if (contact.name === TestUser.selectedContact.name) { 
     //     return (
@@ -734,9 +757,23 @@ class MessageList extends React.Component {
     //   };
     // });
     
+    let sentMessages = this.props.sentData.slice().reverse();
+    let receivedMessages = this.state.receivedData.slice().reverse();
+    let messages = sentMessages.concat(receivedMessages).sort(function(a, b) {
+      
+      if (a.props.weight < b.props.weight) {
+        return 1;
+      }
+      if (a.props.weight > b.props.weight) {
+        return -1;
+      }
+      return 0;
+    });
+
+
     return (
       <div id="message-list" style={style}>
-        {this.props.data.reverse()}
+        {messages}
       </div>
     );
   }
@@ -804,9 +841,7 @@ class Message extends React.Component {
       margin: "auto"
     };
 
-    let date = new Date();
-    date = date.getHours() + ":" + ((date.getMinutes() < 10) ? ("0" + date.getMinutes()) : date.getMinutes());
-
+    
     return (
       <div>
         <div style={style}>
@@ -819,7 +854,7 @@ class Message extends React.Component {
             </p>
             {this.props.text}
           </div>
-          <div style={timeStyle}>{date}</div>
+          <div style={timeStyle}>{this.props.date}</div>
         </div>
       </div>
     );
@@ -834,7 +869,7 @@ class ChatContainerFooter extends React.Component {
   
   constructor(props) {
     super(props);
-    func = props.receiveCallback;
+    func = props.displaySentMessages;
   };
 
   onSubmit(e) {
