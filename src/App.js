@@ -7,21 +7,25 @@ let TestUser = {
     {
       name: "Keith Cameron",
       message: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur quas quibusdam facilis saepe nisi impedit repudiandae architecto, iure voluptate, officia porro at consectetur, unde ratione fugiat, quae deleniti nihil! Inventore.",
-      status: "OFFLINE"
+      status: "OFFLINE",
+      color: ""
     },
     {
       name: "Alice Jackson",
       message: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur quas quibusdam facilis saepe nisi impedit repudiandae architecto, iure voluptate, officia porro at consectetur, unde ratione fugiat, quae deleniti nihil! Inventore.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur quas quibusdam facilis saepe nisi impedit repudiandae architecto, iure voluptate, officia porro at consectetur, unde ratione fugiat, quae deleniti nihil! Inventore.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur quas quibusdam facilis saepe nisi impedit repudiandae architecto, iure voluptate, officia porro at consectetur, unde ratione fugiat, quae deleniti nihil! Inventore.",
-      status: "ONLINE"
+      status: "ONLINE",
+      color: ""
     },
     {
       name: "Owen Davies",
       message: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur quas quibusdam facilis saepe nisi impedit repudiandae architecto, iure voluptate, officia porro at consectetur, unde ratione fugiat, quae deleniti nihil! Inventore.",
-      status: "OFFLINE"
+      status: "OFFLINE",
+      color: ""
     },
     {
       name: "Samantha Terry",
-      message: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur quas quibusdam facilis saepe nisi impedit repudiandae architecto, iure voluptate, officia porro at consectetur, unde ratione fugiat, quae deleniti nihil! Inventore."  
+      message: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur quas quibusdam facilis saepe nisi impedit repudiandae architecto, iure voluptate, officia porro at consectetur, unde ratione fugiat, quae deleniti nihil! Inventore.",
+      color: ""
     },
     {name: "Brendan Eich"},
     {name: "Eric Elliot"},
@@ -47,6 +51,12 @@ let TestUser = {
   }
 };
 
+TestUser.contacts.map(function(contact) {
+  contact.color = "#"+Math.floor(Math.random()*16777215).toString(16);
+});
+
+navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
 let peer = new Peer({
   key: 'r7jd35v5u9fcg14i',
   debug: 3,
@@ -66,6 +76,18 @@ peer.on('connection', connect);
 
 peer.on('error', function(err) {
   console.log(err);
+});
+
+peer.on('call', function(call){
+  call.answer(window.localStream);
+
+  if (window.existingCall) {
+    window.existingCall.close();
+  }
+
+  call.on('stream', function(stream){
+    $('#their-video').prop('src', URL.createObjectURL(stream));
+  });
 });
 
 function connect(c) {
@@ -298,9 +320,9 @@ class ContactList extends React.Component {
       // height: "100%"
       // maxHeight: "calc(100%-400px)"
     }
-    let contactNodes = TestUser.contacts.map(function(contact) {
+    let contactNodes = TestUser.contacts.map(function(contact, index) {
       return (
-        <Contact>
+        <Contact index={index}>
           {contact.name}
         </Contact>
       );
@@ -335,10 +357,13 @@ class Contact extends React.Component {
 
   render() {
 
-    let avatarBackground = "#"+Math.floor(Math.random()*16777215).toString(16);
+    // let avatarBackground = "#"+Math.floor(Math.random()*16777215).toString(16);
     // '#'+(Math.random()*0xFFFFFF<<0).toString(16);
 
     let avatar = this.props.children.substr(0, 2).toUpperCase();
+
+    let avatarBackground = TestUser.contacts[this.props.index].color;
+    
 
     let style = {
       padding: "5px",
@@ -353,6 +378,7 @@ class Contact extends React.Component {
         // transform: "rotate(90deg) scale(1.1,1.1)"
       }
     };
+
 
     let photoStyle = {
       width: "40px",
@@ -378,6 +404,7 @@ class Contact extends React.Component {
 };
 
 Contact = Radium(Contact);
+// Contact = MaterialAvatar(Contact, {shape: 'circle'});
 
 // @Radium
 class SideBarFooter extends React.Component {
@@ -428,6 +455,16 @@ class SideBarFooter extends React.Component {
 SideBarFooter = Radium(SideBarFooter);
 
 class ChatContainer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {data:[]};
+    this.receiveCallback = this.receiveCallback.bind(this);
+  };
+
+  receiveCallback(text) {
+    this.setState({data: this.state.data.concat(<Message text={text} author={"You"} key={this.state.data.length + 1} />)});
+  };
+
   render() {
 
     let style = {
@@ -454,8 +491,8 @@ class ChatContainer extends React.Component {
     return (       
       <div style={style}>
         <Header />
-        <ChatSection />
-        <ChatContainerFooter />
+        <ChatSection data={this.state.data}/>
+        <ChatContainerFooter receiveCallback={this.receiveCallback}/>
       </div>
     );   
   } 
@@ -527,6 +564,27 @@ class ButtonCall extends React.Component {
 ButtonCall = Radium(ButtonCall);
 
 class ButtonVideocall extends React.Component {
+  onClick() {
+    let index = $('#msg').val().indexOf(' ');
+    let requestedPeer = $('#msg').val().substr(0, index);
+
+    var call = peer.call(requestedPeer, window.localStream);
+
+    if (window.existingCall) {
+      window.existingCall.close();
+    }    
+    console.log("AZAZA");
+    navigator.getUserMedia({audio: true, video: true}, function(stream){
+      $('#my-video').prop('src', URL.createObjectURL(stream));
+      window.localStream = stream;
+    }, function(){ console.log("error1"); });
+
+    call.on('stream', function(stream){
+      $('#their-video').prop('src', URL.createObjectURL(stream));
+    });
+
+  };
+
   render() {
 
     let style = {
@@ -553,7 +611,7 @@ class ButtonVideocall extends React.Component {
     };
 
     return (
-      <div style={style}>
+      <div style={style} onClick={this.onClick}>
         <span style={iconStyle} className="fa fa-video-camera fa-inverse fa-lg"></span>
       </div>
     );
@@ -617,9 +675,26 @@ class ChatSection extends React.Component {
       height: "calc(100% - 141px)"
     };
 
+    let myvideoStyle = {
+      width: "280px",
+      height: "auto",
+      maxHeight: "280px",
+      backgroundColor: "#eee"
+    };
+
+    let theirvideoStyle = {
+      width: "280px",
+      height: "auto",
+      maxHeight: "280px",
+      backgroundColor: "#eee",
+      marginRight: "10px"
+    };
+
     return (
       <section style={styleSection}>
-        <MessageList />
+        <video style={theirvideoStyle} id="their-video" autoPlay></video>
+        <video style={myvideoStyle} id="my-video" muted="true" autoPlay></video>
+        <MessageList data={this.props.data}/>
       </section>
     );
   }
@@ -647,24 +722,21 @@ class MessageList extends React.Component {
       // maxHeight: "calc(100%-400px)"
     };
     
-    let messages = TestUser.contacts.map(function(contact) {
-      if (contact.name === TestUser.selectedContact.name) { 
-        let boldStyle = {
-          margin: "12px 0 7px 0"
-        };
-        return (
-          <Message>
-            <p style={boldStyle}><b>{contact.name}</b></p>
-            {contact.message}
-          </Message>
-        );
-      };
-    });
+
+    // let messages = this.state.data.map(function(contact) {
+    //   if (contact.name === TestUser.selectedContact.name) { 
+    //     return (
+    //       <Message>
+    //         <p style={boldStyle}><b>{contact.name}</b></p>
+    //         {contact.message}
+    //       </Message>
+    //     );
+    //   };
+    // });
     
     return (
-      <div style={style}>
-        {messages}
-        <div></div>
+      <div id="message-list" style={style}>
+        {this.props.data.reverse()}
       </div>
     );
   }
@@ -724,6 +796,10 @@ class Message extends React.Component {
       // display: "flex"
     };
 
+    let boldStyle = {
+      margin: "12px 0 7px 0"
+    };
+
     let iconStyle = {
       margin: "auto"
     };
@@ -737,7 +813,12 @@ class Message extends React.Component {
         <div style={photoStyle}>
           <span style={iconStyle} className="fa fa-user fa-3x"></span>
         </div>
-          <div style={textStyle}>{this.props.children}</div>
+          <div style={textStyle}>
+            <p style={boldStyle}>
+              <b>{this.props.author}</b>
+            </p>
+            {this.props.text}
+          </div>
           <div style={timeStyle}>{date}</div>
         </div>
       </div>
@@ -747,7 +828,15 @@ class Message extends React.Component {
 
 Message = Radium(Message);
 
+let func;
+
 class ChatContainerFooter extends React.Component {
+  
+  constructor(props) {
+    super(props);
+    func = props.receiveCallback;
+  };
+
   onSubmit(e) {
     e.preventDefault();
     let index = $('#msg').val().indexOf(' ');
@@ -759,7 +848,8 @@ class ChatContainerFooter extends React.Component {
     for (let i = 0; i < conns.length; i++) {
       let conn = conns[i];
       conn.send(msg);
-      console.log("You: " + msg);
+      // console.log("You: " + msg);
+      func(msg);
     };
     $('#msg').val(requestedPeer + ' ');
     $('#msg').focus();
