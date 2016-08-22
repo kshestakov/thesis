@@ -863,16 +863,16 @@ class Message extends React.Component {
 
 Message = Radium(Message);
 
-let func;
+// let func;
 
 class ChatContainerFooter extends React.Component {
   
   constructor(props) {
     super(props);
-    func = props.displaySentMessages;
+    // this.func = props.displaySentMessages;
   };
 
-  onSubmit(e) {
+  onSubmit(e, callback) {
     e.preventDefault();
     let index = $('#msg').val().indexOf(' ');
     let requestedPeer = $('#msg').val().substr(0, index);
@@ -884,7 +884,7 @@ class ChatContainerFooter extends React.Component {
       let conn = conns[i];
       conn.send(msg);
       // console.log("You: " + msg);
-      func(msg);
+      callback(msg);
     };
     $('#msg').val(requestedPeer + ' ');
     $('#msg').focus();
@@ -974,7 +974,7 @@ class ChatContainerFooter extends React.Component {
 
     return (
       <footer style={style}>
-        <form onSubmit={this.onSubmit} style={formStyle}>
+        <form onSubmit={(e) => this.onSubmit(e, this.props.displaySentMessages)} style={formStyle}>
           <div style={wrapperStyle}>
             <div style={wrapperTextareaStyle}>
               <textarea style={textareaStyle} placeholder="Message" id="msg"></textarea>
